@@ -10,7 +10,7 @@ namespace SectorApp.Repository
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {
-            var filter = Builders<T>.Filter.Eq("isAgreed", true);
+            var filter = Builders<T>.Filter.Exists("_id");
             return await _collection.Find(filter).ToListAsync();
         }
 
