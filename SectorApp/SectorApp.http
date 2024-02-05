@@ -1,0 +1,6 @@
+@SectorApp_HostAddress = http://localhost:5234
+
+GET {{SectorApp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
