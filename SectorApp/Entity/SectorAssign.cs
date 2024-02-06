@@ -11,5 +11,7 @@ namespace SectorApp.Entity
         public string Name { get; set; } = string.Empty;
         public bool IsAgreed { get; set; }
         public List<Sector> Sectors { get; set; } = new List<Sector>();
+        public DateTime CreateDate { get; set; } = DateTime.UtcNow;
+        public string CreateBy { get; set; } = string.Empty;
     }
 }
