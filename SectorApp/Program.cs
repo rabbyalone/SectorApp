@@ -17,6 +17,7 @@ builder.Services.Configure<DbSettings>(
     builder.Configuration.GetSection("MongoSettings"));
 
 builder.Services.AddScoped(typeof(IMongoRepository<>), typeof(MongoRepository<>));
+builder.Services.AddCors(options => options.AddDefaultPolicy(a => a.WithOrigins("*").AllowAnyHeader().AllowAnyMethod()));
 
 var app = builder.Build();
 
@@ -64,5 +65,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.UseCors();
 app.Run();
