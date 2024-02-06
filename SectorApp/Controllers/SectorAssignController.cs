@@ -24,12 +24,13 @@ namespace SectorApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] SectorAssign sector)
         {
+            sector.Id = Guid.NewGuid().ToString("N").Substring(0, 24);
             var entity = await mongoRepository.InsertAsync(sector);
             return Ok(entity);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(int id, [FromBody] SectorAssign sector)
+        public async Task<IActionResult> Update(Guid id, [FromBody] SectorAssign sector)
         {
             var entity = await mongoRepository.UpdateAsync(id, sector);
             return Ok(entity);

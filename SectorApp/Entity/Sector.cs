@@ -7,10 +7,16 @@ namespace SectorApp.Entity
     public class Sector
     {
         [BsonId]
-        [BsonRepresentation(BsonType.Int32)]
-        public int Id { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string? Id { get; set; }
         public string GroupName { get; set; } = string.Empty;
-        public List<string> Sectors { get; set; } = new List<string>();
+        public List<GroupOption> Sectors { get; set; } = new List<GroupOption>();
+    }
+
+    public class GroupOption
+    {
+        public string Value { get; set; }
+        public string Label { get; set; }
     }
 
 }

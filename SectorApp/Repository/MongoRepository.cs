@@ -6,10 +6,21 @@ namespace SectorApp.Repository
 {
     public class MongoRepository<T> : IMongoRepository<T> where T : class
     {
-        private readonly IMongoCollection<T> _collection;
+        private IMongoCollection<T> _collection;
+        private readonly IMongoDatabase _database;
+
+
+        public MongoRepository(IOptions<DbSettings> dbSettings)
+        {
+            var client = new MongoClient(dbSettings.Value.MongoConnection);
+            _database = client.GetDatabase(dbSettings.Value.DatabaseName);
+            _collection = _database.GetCollection<T>(typeof(T).Name);
+        }
+
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {
+
             var filter = Builders<T>.Filter.Exists("_id");
             return await _collection.Find(filter).ToListAsync();
         }
@@ -23,12 +34,7 @@ namespace SectorApp.Repository
             return property.GetValue(entity);
         }
 
-        public MongoRepository(IOptions<DbSettings> dbSettings)
-        {
-            var client = new MongoClient(dbSettings.Value.MongoConnection);
-            var database = client.GetDatabase(dbSettings.Value.DatabaseName);
-            _collection = database.GetCollection<T>(dbSettings.Value.CollectionName);
-        }
+
 
         public async Task<T> InsertAsync(T entity)
         {
@@ -36,7 +42,7 @@ namespace SectorApp.Repository
             return entity;
         }
 
-        public async Task<T> UpdateAsync(int id, T entity)
+        public async Task<T> UpdateAsync(Guid id, T entity)
         {
             var filter = Builders<T>.Filter.Eq("_id", id);
             await _collection.ReplaceOneAsync(filter, entity);
