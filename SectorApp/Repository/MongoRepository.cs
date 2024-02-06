@@ -18,11 +18,19 @@ namespace SectorApp.Repository
         }
 
 
+
+
         public async Task<IEnumerable<T>> GetAllAsync()
         {
 
             var filter = Builders<T>.Filter.Exists("_id");
             return await _collection.Find(filter).ToListAsync();
+        }
+
+        public async Task<T> GetByIdAsync(object id)
+        {
+            var filter = Builders<T>.Filter.Eq("_id", id);
+            return await _collection.Find(filter).SingleOrDefaultAsync();
         }
 
         private object GetId(T entity)
@@ -42,7 +50,7 @@ namespace SectorApp.Repository
             return entity;
         }
 
-        public async Task<T> UpdateAsync(Guid id, T entity)
+        public async Task<T> UpdateAsync(object id, T entity)
         {
             var filter = Builders<T>.Filter.Eq("_id", id);
             await _collection.ReplaceOneAsync(filter, entity);

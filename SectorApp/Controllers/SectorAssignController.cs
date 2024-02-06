@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using SectorApp.Entity;
 using SectorApp.Repository;
 
@@ -21,6 +22,15 @@ namespace SectorApp.Controllers
             return Ok(all);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(string id)
+        {
+            if (!ObjectId.TryParse(id, out var sectorId))
+                return BadRequest("Invalid ID format");
+            var single = await mongoRepository.GetByIdAsync(sectorId);
+            return Ok(single);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] SectorAssign sector)
         {
@@ -30,9 +40,13 @@ namespace SectorApp.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(Guid id, [FromBody] SectorAssign sector)
+        public async Task<IActionResult> Update(string id, [FromBody] SectorAssign sector)
         {
-            var entity = await mongoRepository.UpdateAsync(id, sector);
+
+            if (!ObjectId.TryParse(id, out var sectorId))
+                return BadRequest("Invalid ID format");
+
+            var entity = await mongoRepository.UpdateAsync(sectorId, sector);
             return Ok(entity);
         }
     }
