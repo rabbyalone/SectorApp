@@ -21,6 +21,16 @@ namespace SectorApp.Controllers
             return Ok(all);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(string id)
+        {
+            if (!ObjectId.TryParse(id, out var sectorId))
+                return BadRequest("Invalid ID format");
+            var single = await mongoRepository.GetByIdAsync(sectorId);
+            return Ok(single);
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Sector sector)
         {
