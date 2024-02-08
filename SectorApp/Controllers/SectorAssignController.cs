@@ -17,7 +17,7 @@ namespace SectorApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllSectors(string email)
+        public async Task<IActionResult> GetAllSectors()
         {
             var filter = Builders<SectorAssign>.Filter.Exists("_id");
             var all = await mongoRepository.GetAllAsync(filter);
