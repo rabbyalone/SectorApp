@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
+using MongoDB.Driver;
 using SectorApp.Entity;
 using SectorApp.Repository;
 
@@ -16,9 +17,10 @@ namespace SectorApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllSectors()
+        public async Task<IActionResult> GetAllSectors(string email)
         {
-            var all = await mongoRepository.GetAllAsync();
+            var filter = Builders<SectorAssign>.Filter.Eq("CreateBy", email); ;
+            var all = await mongoRepository.GetAllAsync(filter);
             return Ok(all);
         }
 

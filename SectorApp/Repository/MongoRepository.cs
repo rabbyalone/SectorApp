@@ -20,10 +20,9 @@ namespace SectorApp.Repository
 
 
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IEnumerable<T>> GetAllAsync(FilterDefinition<T> filter)
         {
 
-            var filter = Builders<T>.Filter.Exists("_id");
             return await _collection.Find(filter).ToListAsync();
         }
 

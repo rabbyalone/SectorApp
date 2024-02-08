@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
+using MongoDB.Driver;
 using SectorApp.Entity;
 using SectorApp.Repository;
 
@@ -17,7 +18,8 @@ namespace SectorApp.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllSectors()
         {
-            var all = await mongoRepository.GetAllAsync();
+            var filter = Builders<Sector>.Filter.Exists("_id");
+            var all = await mongoRepository.GetAllAsync(filter);
             return Ok(all);
         }
 
